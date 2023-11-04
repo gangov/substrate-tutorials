@@ -1,6 +1,6 @@
 use super::mock::*;
-use crate::{pallet, Error};
-use frame_support::{assert_noop, assert_ok};
+use crate::{pallet, Error, Config};
+use frame_support::{assert_noop, assert_ok, assert_err};
 
 #[test]
 fn set_value_ok() {
@@ -12,7 +12,11 @@ fn set_value_ok() {
 
 #[test]
 fn set_value_err_already_set() {
-	new_test_ext().execute_with(|| todo!("Verify if the function returns the expected error."));
+	new_test_ext().execute_with(|| {
+		// todo!("Verify if the function returns the expected error.")
+		let _ = Flipper::set_value(Origin::signed(ALICE), true);
+		assert_noop!(Flipper::set_value(Origin::signed(ALICE), true), Error::<TestRuntime>::AlreadySet);
+	});
 }
 
 #[test]
