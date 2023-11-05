@@ -18,4 +18,5 @@ $ cargo test
 While writing those extrinsics you will use the core features of a Substrate pallet: storages, events, and errors.
 Try to remember how each one of those elements is declared and configured, and then how it is used in the extrinsics.
 
-The pallet you are writing allows users to create their own coins, like Ethereum's ERC20. That's cool. If you had to implement it entirely by yourself, what would you change? 
+The pallet you are writing allows users to create their own coins, like Ethereum's ERC20. That's cool. 
+If you had to implement it entirely by yourself, what would you change? 
