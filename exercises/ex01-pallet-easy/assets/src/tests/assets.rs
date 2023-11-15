@@ -251,7 +251,7 @@ mod burn {
 			let mint_amount = 100;
 			let burn_amount = 50;
 			assert_ok!(Assets::mint(Origin::signed(ALICE), 0, mint_amount, BOB));
-
+			assert_eq!(Assets::account(0, BOB), mint_amount);
 			let mut total_supply = Assets::asset(0).unwrap().supply;
 
 			assert_ok!(Assets::burn(Origin::signed(BOB), 0, burn_amount));
@@ -282,7 +282,11 @@ mod burn {
 			assert_ok!(Assets::mint(Origin::signed(ALICE), 0, mint_amount, ALICE));
 			assert_ok!(Assets::mint(Origin::signed(ALICE), 0, mint_amount, BOB));
 
+			assert_eq!(Assets::account(0, ALICE), mint_amount);
+			assert_eq!(Assets::account(0, BOB), mint_amount);
+
 			let total_supply = Assets::asset(0).unwrap().supply;
+			assert_eq!(total_supply, 200);
 
 			assert_ok!(Assets::burn(Origin::signed(BOB), 0, burn_amount));
 			// Total supply and account have been reduced by mint_amount.

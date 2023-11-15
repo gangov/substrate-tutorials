@@ -202,10 +202,36 @@ pub mod pallet {
 		pub fn burn(origin: OriginFor<T>, asset_id: AssetId, amount: u128) -> DispatchResult {
 			// TODO:
 			// - Ensure the extrinsic origin is a signed transaction.
-			// - Mutate the total supply.
+			let origin = ensure_signed(origin)?;
+			let mut burned_amount = 0;
 			// - Mutate the account balance.
-			// - Emit a `Burned` event.
+			Account::<T>::mutate(asset_id, origin.clone(), |balance| {
+				if (*balance < amount) {
+					burned_amount = *balance;
+					*balance = 0;
+				} else {
+					*balance = balance.saturating_sub(amount);
+					burned_amount = amount;
+				}
+			});
+			// - Mutate the total supply.
+			Asset::<T>::try_mutate(asset_id, |maybe_details| -> DispatchResult {
+				let details = maybe_details.as_mut().ok_or(Error::<T>::UnknownAssetId)?;
 
+				let old_supply = details.supply;
+				details.supply = details.supply.saturating_sub(burned_amount);
+
+				Ok(())
+			})?;
+
+			// - Emit a `Burned` event.
+			if let Some(asset_details) = Asset::<T>::get(asset_id) {
+				Self::deposit_event(Event::<T>::Burned {
+					asset_id,
+					owner: origin,
+					total_supply: asset_details.supply,
+				});
+			};
 			Ok(())
 		}
 
