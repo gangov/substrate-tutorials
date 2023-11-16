@@ -3,8 +3,10 @@
 A Substrate based blockchain is made of the sum of the pallets it includes.
 In this exercise, you are going to learn how to include a pallet in a runtime.
 
-We added a git submodule to this repository: [substrate-node-template](https://github.com/substrate-developer-hub/substrate-node-template).  
-It's a great unlicenced project that offers a functional, yet empty, Substrate blockchain. You can think about it as a skeleton, ready to receive the flesh and life you chose to infuse in it.
+We added a git submodule to this repository: 
+[substrate-node-template](https://github.com/substrate-developer-hub/substrate-node-template).  
+It's a great unlicenced project that offers a functional, yet empty, Substrate blockchain. You can think about it as a skeleton, 
+ready to receive the flesh and life you chose to infuse in it.
 We are going to add the asset pallet we wrote in the previous exercise to this runtime, and then run it.
 
 ## Step 0: Dry run
@@ -24,10 +26,13 @@ Your terminal should fill with logs looking like this:
 ```
 It means that the chain is running and producing new blocks. Good.
 
-Now open the `Polkadot.js` app, either in your [web navigator](https://polkadot.js.org/apps/#/explorer) or on your [desktop](https://github.com/polkadot-js/apps/releases).
-Connect to your local development chain (top left icon, `DEVELOPMENT` section, `Local Node`, hit the top `Switch` button with two arrows forming a circle), by default at `127.0.0.1:9944`.
+Now open the `Polkadot.js` app, either in your [web navigator](https://polkadot.js.org/apps/#/explorer) or on your 
+[desktop](https://github.com/polkadot-js/apps/releases).
+Connect to your local development chain (top left icon, `DEVELOPMENT` section, `Local Node`, hit the top `Switch` button with two 
+arrows forming a circle), by default at `127.0.0.1:9944`.
 Bravo! You can now interact with the chain that is running on your local machine.
-Take some time to explore the UI, you can go to the Developer/Extrinsic section and do some calls, even transfer some funds using the pallet Balances.
+Take some time to explore the UI, you can go to the Developer/Extrinsic section and do some calls, even transfer some funds using the 
+pallet Balances.
 
 Great. Now go back to your terminal and hit `Ctrl + c` to kill the chain. We are going to add our own stuff now.
 
@@ -50,7 +55,8 @@ Compile again to make sure the crate is well added to the project.
 ## Step 1: construct_runtime!
 
 Open `substrate-node-template/runtime/src/lib.rs`.  
-Find the `construct_runtime!` macro call. That's where we declare the pallets we want our runtime to use. That's where we have to add our `assets` pallet.
+Find the `construct_runtime!` macro call. That's where we declare the pallets we want our runtime to use. That's where we have to 
+add our `assets` pallet.
 
 First thing first, add the pallet assets to the runtime.
 ```rust
@@ -66,7 +72,8 @@ construct_runtime!(
 );
 ```
 
-Now try a `cargo build`... it fails miserably. Why? Because we declared our intention to use the pallet `assets` in the runtime but we did not give it any configuration. What does it mean?  
+Now try a `cargo build`... it fails miserably. Why? Because we declared our intention to use the pallet `assets` in the runtime 
+but we did not give it any configuration. What does it mean?  
 Remember this part of `exercises/ex01-pallet-easy/assets/src/lib.rs`?
 
 ```rust
@@ -79,7 +86,8 @@ Remember this part of `exercises/ex01-pallet-easy/assets/src/lib.rs`?
 		type MaxLength: Get<u32>;
 	}
 ```
-It states that to run, this pallet must be provided with an `Event` type (to emit runtime events), and a `MaxLength` type (used to store strings as `BoundedVec`).  
+It states that to run, this pallet must be provided with an `Event` type (to emit runtime events), and a `MaxLength` type (used to 
+store strings as `BoundedVec`).  
 So let's give those types to the runtime.
 
 Just over the `construct_runtime!` macro add these lines:
