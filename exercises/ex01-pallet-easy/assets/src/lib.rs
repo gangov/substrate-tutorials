@@ -245,7 +245,7 @@ pub mod pallet {
 			// TODO:
 			// - Ensure the extrinsic origin is a signed transaction.
 			let origin = ensure_signed(origin)?;
-			Asset::<T>::try_get(asset_id).map_err(|_| Error::<T>::UnknownAssetId)?;
+		    ensure!(Asset::<T>::contains_key(asset_id), Error::<T>::UnknownAssetId);
 			// - Mutate both account balances.
 			let mut transferred_amount = 0;
 			Account::<T>::mutate(asset_id, origin.clone(), |balance| {
