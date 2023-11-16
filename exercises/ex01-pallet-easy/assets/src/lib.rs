@@ -206,7 +206,7 @@ pub mod pallet {
 			let mut burned_amount = 0;
 			// - Mutate the account balance.
 			Account::<T>::mutate(asset_id, origin.clone(), |balance| {
-				if (*balance < amount) {
+				if *balance < amount {
 					burned_amount = *balance;
 					*balance = 0;
 				} else {
@@ -244,8 +244,30 @@ pub mod pallet {
 		) -> DispatchResult {
 			// TODO:
 			// - Ensure the extrinsic origin is a signed transaction.
+			let origin = ensure_signed(origin)?;
+			Asset::<T>::try_get(asset_id).map_err(|_| Error::<T>::UnknownAssetId)?;
 			// - Mutate both account balances.
+			let mut transferred_amount = 0;
+			Account::<T>::mutate(asset_id, origin.clone(), |balance| {
+				if *balance < amount {
+					transferred_amount = *balance;
+					*balance = 0;
+				} else {
+					*balance = balance.saturating_sub(amount);
+					transferred_amount = amount;
+				}
+			});
+
+			Account::<T>::mutate(asset_id, to.clone(), |balance| {
+				*balance = balance.saturating_add(transferred_amount);
+			});
 			// - Emit a `Transferred` event.
+			Self::deposit_event(Event::<T>::Transferred {
+				asset_id,
+				from: origin,
+				to,
+				amount,
+			});
 
 			Ok(())
 		}
