@@ -218,7 +218,6 @@ pub mod pallet {
 			Asset::<T>::try_mutate(asset_id, |maybe_details| -> DispatchResult {
 				let details = maybe_details.as_mut().ok_or(Error::<T>::UnknownAssetId)?;
 
-				let old_supply = details.supply;
 				details.supply = details.supply.saturating_sub(burned_amount);
 
 				Ok(())
