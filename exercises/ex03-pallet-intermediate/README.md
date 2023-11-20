@@ -15,4 +15,6 @@ about NFT, and you are learning how to code those.
 
 About the actual coding, it's just a second round to make sure you really mastered the core of 
 Substrate pallets. Once this is done, we will start to explore some more hairy features of the 
-framework. Good luck!
+framework. 
+
+Good luck!
