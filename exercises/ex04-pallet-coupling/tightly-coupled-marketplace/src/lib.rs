@@ -94,7 +94,7 @@ pub mod pallet {
 			let buyer = ensure_signed(origin.clone())?;
 
 			let sale_data = NFTsForSale::<T>::get(nft_id, seller.clone());
-			let owned = pallet_marketplace_nfts::Pallet::<T>::account(nft_id, buyer.clone());
+			let owned = pallet_marketplace_nfts::Pallet::<T>::account(nft_id, seller.clone());
 
 			ensure!(amount <= sale_data.amount, Error::<T>::NotEnoughInSale);
 			ensure!(sale_data.amount <= owned, Error::<T>::NotEnoughOwned);
@@ -106,7 +106,9 @@ pub mod pallet {
 
 			<T as pallet::Config>::Currency::transfer(&buyer, &seller, total_to_pay, KeepAlive)?;
 
-			pallet_marketplace_nfts::Pallet::<T>::transfer(origin, nft_id, amount, seller.clone());
+			let transfer_result = pallet_marketplace_nfts::Pallet::<T>::transfer(origin, nft_id, amount, seller.clone());
+
+			dbg!(transfer_result);
 
 			if amount == sale_data.amount {
 				NFTsForSale::<T>::remove(nft_id, seller.clone());
