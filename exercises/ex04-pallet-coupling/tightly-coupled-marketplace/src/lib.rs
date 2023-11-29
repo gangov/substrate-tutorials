@@ -106,7 +106,8 @@ pub mod pallet {
 
 			<T as pallet::Config>::Currency::transfer(&buyer, &seller, total_to_pay, KeepAlive)?;
 
-			let transfer_result = pallet_marketplace_nfts::Pallet::<T>::transfer(origin, nft_id, amount, seller.clone());
+			// let transfer_result = pallet_marketplace_nfts::Pallet::<T>::transfer(origin, nft_id, amount, seller.clone());
+            let transfer_result = pallet_marketplace_nfts::Pallet::<T>::unchecked_transfer(nft_id, seller.clone(), buyer.clone(), amount);
 
 			dbg!(transfer_result);
 
