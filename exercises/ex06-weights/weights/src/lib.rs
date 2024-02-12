@@ -74,7 +74,7 @@ pub mod pallet {
 			if address == Some(who.clone()) {
 				Self::deposit_event(Event::IsRoot(who));
 			} else {
-				return Err(Error::<T>::Invalid.into())
+				return Err(Error::<T>::Invalid.into());
 			}
 
 			Ok(())
@@ -97,7 +97,11 @@ pub mod pallet {
 
 		/////////////////////// Part 3.A - conditional arbitrary weight ///////////////////////
 		//TODO give this extrinsic a weight of 100_000 if `hash` is true, or 10_000 otherwise
-		#[pallet::weight(0)]
+		#[pallet::weight(if *hash {
+			100_000
+		} else {
+			10_000
+		})]
 		pub fn store_maybe_hashed(
 			origin: OriginFor<T>,
 			data: Vec<u8>,
